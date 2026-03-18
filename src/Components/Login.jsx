@@ -28,8 +28,24 @@ const Login = () => {
     googleSingIn(googleProvider)
       .then((result) => {
         toast.success("Successfully logged In");
-        const account = result.user;
-        console.log(account);
+        const newUser = {
+          name: result.user.displayName,
+          email: result.user.email,
+          image: result.user.photoURL,
+        };
+
+        // create user in database
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        })
+          .then((res) => res.json)
+          .then((data) => {
+            console.log("saved in database", data);
+          });
       })
       .catch((error) => {
         toast.error("Something went wrong");
