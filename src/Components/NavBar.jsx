@@ -1,7 +1,20 @@
-import React from "react";
-import { NavLink } from "react-router";
+import React, { use } from "react";
+import { Link, NavLink } from "react-router";
+import { AuthContext } from "../provider/AuthProvider";
+import toast from "react-hot-toast";
 
 const NavBar = () => {
+  const { user, logOut } = use(AuthContext);
+
+  const hadndleSignOut = () => {
+    logOut()
+      .then(() => {
+        toast.success("Succefully Sign-out");
+      })
+      .catch((error) => {
+        toast.error("An error happend");
+      });
+  };
   const links = (
     <>
       <li>
@@ -41,14 +54,35 @@ const NavBar = () => {
           </ul>
         </div>
         <a className="btn btn-ghost text-xl">
-          SecondLife<span className="text-purple-500">Hub</span>
+          reUse <span className="text-purple-500"> Hub</span>
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Button</a>
+        {user ? (
+          <Link
+            to="/"
+            onClick={hadndleSignOut}
+            className="btn border border-purple-500 text-purple-500"
+          >
+            LogOut
+          </Link>
+        ) : (
+          <div className=" flex gap-2">
+            {" "}
+            <Link
+              to="/auth/login"
+              className="btn border border-purple-500 text-purple-500"
+            >
+              Login
+            </Link>
+            <Link to="/auth/register" className="btn bg-purple-500 text-white">
+              Register
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
