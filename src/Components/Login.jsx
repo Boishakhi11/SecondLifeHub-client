@@ -1,23 +1,30 @@
-import React from "react";
-import { use } from "react";
+import React, { useContext, useState } from "react";
 
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext, googleProvider } from "../provider/AuthProvider";
-
 import toast from "react-hot-toast";
+import { FaEye, FaEyeDropper } from "react-icons/fa";
+import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 
 const Login = () => {
-  const { signInUser, googleSingIn } = use(AuthContext);
+  const { signInUser, googleSingIn } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  console.log(location);
 
   const handleLogin = (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
+
     signInUser(email, password)
       .then(() => {
         toast.success("Welcome to reUse Hub");
+        //navigating user to route they requested otherwise homepage
+        navigate(`${location.state ? location.state : "/"}`);
+        form.reset();
       })
       .catch(() => {
         toast.error("Something went wrong");
@@ -28,6 +35,7 @@ const Login = () => {
     googleSingIn(googleProvider)
       .then((result) => {
         toast.success("Successfully logged In");
+        navigate(`${location.state ? location.state : "/"}`);
         const newUser = {
           name: result.user.displayName,
           email: result.user.email,
@@ -71,13 +79,20 @@ const Login = () => {
               placeholder="Email"
             />
             <label className="label">Password</label>
-            <input
-              name="password"
-              type="password"
-              className="input"
-              placeholder="Password"
-            />
-
+            <div className="relative">
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                className="input"
+                placeholder="Password"
+              />
+              <span
+                className="absolute top-3 right-7"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <IoEyeOffSharp /> : <IoEyeSharp />}
+              </span>
+            </div>
             <button type="submit" className="btn btn-neutral mt-4">
               Login
             </button>

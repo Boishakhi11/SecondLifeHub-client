@@ -1,9 +1,15 @@
 import React, { use } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../provider/AuthProvider";
 import toast from "react-hot-toast";
+import { useState } from "react";
+import { IoEye, IoEyeOff } from "react-icons/io5";
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const { createUser } = use(AuthContext);
   const handleRegister = (e) => {
     e.preventDefault();
@@ -12,12 +18,12 @@ const Register = () => {
     const photo = form.photo.value;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(name, photo, email, password);
     form.reset();
 
     createUser(email, password).then((userCredential) => {
       const user = userCredential.user;
-      toast.success("Account Created Succesfully").catch((error) => {
+      toast.success("Account Created Succesfully");
+      navigate(`${location.state ? location.state : "/"}`).catch((error) => {
         toast.error("Something Went wrong");
       });
     });
@@ -56,12 +62,20 @@ const Register = () => {
               placeholder="Email"
             />
             <label className="label">Password</label>
-            <input
-              name="password"
-              type="password"
-              className="input"
-              placeholder="Password"
-            />
+            <div className="relative">
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                className="input"
+                placeholder="Password"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute top-3 right-7"
+              >
+                {showPassword ? <IoEyeOff /> : <IoEye></IoEye>}
+              </span>
+            </div>
 
             <button type="submit" className="btn btn-neutral mt-4">
               Register
