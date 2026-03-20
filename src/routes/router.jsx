@@ -6,6 +6,8 @@ import Register from "../Components/Register";
 import Login from "../Components/Login";
 import AuthLayout from "../layouts/AuthLayout";
 import Error from "../Components/Error";
+import ProductDetails from "../Components/ProductDetails";
+import Loading from "../Components/Loading";
 
 const router = createBrowserRouter([
   {
@@ -17,21 +19,29 @@ const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "allProducts",
+        path: "/products",
         Component: AllProducts,
+      },
+      {
+        path: "productDetails/:id",
+        loader: ({ params }) =>
+          fetch(`http://localhost:3000/products/${params.id}`),
+        hydrateFallbackElement: <Loading></Loading>,
+        Component: ProductDetails,
       },
     ],
   },
+
   {
     path: "/auth",
     Component: AuthLayout,
     children: [
       {
-        path: "/auth/register",
+        path: "register",
         Component: Register,
       },
       {
-        path: "/auth/login",
+        path: "login",
         Component: Login,
       },
     ],
