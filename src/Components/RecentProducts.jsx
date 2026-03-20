@@ -2,6 +2,7 @@ import React from "react";
 
 import { use } from "react";
 import Product from "./Product";
+import { Link } from "react-router";
 
 const RecentProducts = ({ latestProducts }) => {
   const productsdata = use(latestProducts);
@@ -18,7 +19,9 @@ const RecentProducts = ({ latestProducts }) => {
         ))}
       </div>
       <div className="flex justify-center items-center">
-        <button className="btn bg-purple-500 text-white ">Show All</button>
+        <Link to="/products" className="btn bg-purple-500 text-white ">
+          Show All
+        </Link>
       </div>
     </div>
   );

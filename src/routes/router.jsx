@@ -8,6 +8,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import Error from "../Components/Error";
 import ProductDetails from "../Components/ProductDetails";
 import Loading from "../Components/Loading";
+import PrivateRoute from "../provider/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,8 @@ const router = createBrowserRouter([
       },
       {
         path: "/products",
+        loader: () => fetch("http://localhost:3000/products"),
+        hydrateFallbackElement: <Loading></Loading>,
         Component: AllProducts,
       },
       {
@@ -27,7 +30,11 @@ const router = createBrowserRouter([
         loader: ({ params }) =>
           fetch(`http://localhost:3000/products/${params.id}`),
         hydrateFallbackElement: <Loading></Loading>,
-        Component: ProductDetails,
+        element: (
+          <PrivateRoute>
+            <ProductDetails></ProductDetails>
+          </PrivateRoute>
+        ),
       },
     ],
   },

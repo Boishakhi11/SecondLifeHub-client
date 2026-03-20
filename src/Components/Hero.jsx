@@ -30,7 +30,7 @@ const Hero = () => {
       </div>
       {/* buttons */}
       <div className="flex justify-center items-center gap-4">
-        <Link to="/resgister" className="btn bg-purple-500 text-white">
+        <Link to="/products" className="btn bg-purple-500 text-white">
           Watch All Products
         </Link>
         <Link
