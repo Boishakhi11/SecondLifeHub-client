@@ -24,6 +24,7 @@ const Login = () => {
         toast.success("Welcome to reUse Hub");
         //navigating user to route they requested otherwise homepage
         navigate(`${location.state ? location.state : "/"}`);
+
         form.reset();
       })
       .catch(() => {

@@ -4,6 +4,7 @@ import { AuthContext } from "../provider/AuthProvider";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
+import { updateProfile } from "firebase/auth";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -18,16 +19,43 @@ const Register = () => {
     const photo = form.photo.value;
     const email = form.email.value;
     const password = form.password.value;
-    form.reset();
 
-    createUser(email, password).then((userCredential) => {
-      const user = userCredential.user;
-      toast.success("Account Created Succesfully");
-      navigate(`${location.state ? location.state : "/"}`).catch((error) => {
-        toast.error("Something Went wrong");
+    createUser(email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        return updateProfile(user, {
+          displayName: name,
+          photoURL: photo,
+        });
+      })
+      .then(() => {
+        const newUser = {
+          name,
+          email,
+          image: photo,
+        };
+
+        return fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(newUser),
+        });
+      })
+      .then((res) => res.json())
+      .then(() => {
+        toast.success("Account Created Successfully");
+        form.reset(); // ✅ here
+        navigate(location.state ? location.state : "/");
+      })
+      .catch((error) => {
+        toast.error("Something went wrong");
+        console.log(error);
       });
-    });
   };
+
   return (
     <div className="flex flex-col gap-4 justify-center items-center mt-15">
       <div className="space-y-3">
