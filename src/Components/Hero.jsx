@@ -34,7 +34,7 @@ const Hero = () => {
           Watch All Products
         </Link>
         <Link
-          to="/login"
+          to="/createProduct"
           className="btn border border-purple-500 text-purple-500"
         >
           Post an Product
