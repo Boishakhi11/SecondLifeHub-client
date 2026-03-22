@@ -9,6 +9,8 @@ import Error from "../Components/Error";
 import ProductDetails from "../Components/ProductDetails";
 import Loading from "../Components/Loading";
 import PrivateRoute from "../provider/PrivateRoute";
+import MyBids from "../Components/MyBids";
+import CreateProduct from "../Components/CreateProduct";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +26,14 @@ const router = createBrowserRouter([
         loader: () => fetch("http://localhost:3000/products"),
         hydrateFallbackElement: <Loading></Loading>,
         Component: AllProducts,
+      },
+      {
+        path: "/myBids",
+        Component: MyBids,
+      },
+      {
+        path: "/createProduct",
+        Component: CreateProduct,
       },
       {
         path: "productDetails/:id",
